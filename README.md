@@ -6,6 +6,8 @@ This project is a **cloud-native virtual classroom** web application built using
 
 Students can register, log in, and access course materials, while administrators can upload and manage content. The project emphasizes modern cloud deployment practices and full-stack development.
 
+Repository maintained by **samruddhi2026**.
+
 ---
 
 ## Folder Structure
