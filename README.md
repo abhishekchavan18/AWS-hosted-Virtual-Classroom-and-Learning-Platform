@@ -6,12 +6,11 @@ This project is a **cloud-native virtual classroom** web application built using
 
 Students can register, log in, and access course materials, while administrators can upload and manage content. The project emphasizes modern cloud deployment practices and full-stack development.
 
-Repository maintained by **samruddhi2026**.
+Repository maintained by **Abhishek Chavan**.
 
 ---
 
 ## Folder Structure
-
 ```
 AWS-hosted-Virtual-Classroom-and-Learning-Platform/
 ├── Documentation/
@@ -24,8 +23,7 @@ AWS-hosted-Virtual-Classroom-and-Learning-Platform/
 │   └── register.html
 ├── app.py
 ├── README.md
-├── requirements.txt
-└── tempCodeRunnerFile.py
+└── requirements.txt
 ```
 
 ---

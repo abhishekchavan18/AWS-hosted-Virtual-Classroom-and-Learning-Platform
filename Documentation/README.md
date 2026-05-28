@@ -1,3 +1,3 @@
 # Documentation
 
-Project documentation maintained by samruddhi2026.
+Project documentation maintained by Abhishek Chavan.

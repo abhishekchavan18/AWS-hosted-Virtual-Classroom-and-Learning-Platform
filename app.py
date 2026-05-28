@@ -13,7 +13,7 @@ from datetime import timedelta, datetime
 # Load configuration from .env file
 load_dotenv()
 
-# Repository maintained by samruddhi2026.
+# Repository maintained by Abhishek Chavan.
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "classroom_secret_key_12345")
 app.permanent_session_lifetime = timedelta(minutes=15)  # Session timeout
