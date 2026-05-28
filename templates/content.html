@@ -33,7 +33,7 @@
       text-decoration: underline;
     }
 
-    h2 {
+    h2, h3 {
       font-weight: 600;
       color: #212529;
     }
@@ -72,6 +72,20 @@
       color: white;
     }
 
+    .btn-success {
+      background-color: #20c997;
+      border-color: #20c997;
+    }
+
+    .btn-success:hover {
+      background-color: #17b897;
+      border-color: #17b897;
+    }
+
+    .text-success {
+      color: #20c997 !important;
+    }
+
     .badge.bg-primary {
       background-color: #20c997 !important;
     }
@@ -104,18 +118,87 @@
             <a class="nav-link active" href="{{ url_for('content') }}">Courses</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Course Listing -->
+  <!-- Flash Messages -->
+  <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
   <main class="container my-5">
+    <!-- Document Upload Section -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8">
+        <div class="card shadow-sm p-4">
+          <h3 class="fw-semibold text-center mb-3 text-success">Upload Course Material</h3>
+          <p class="text-center text-muted small">Upload PDFs or Images (JPEG, PNG). Max file size: 5MB.</p>
+          <form action="{{ url_for('content') }}" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+              <input type="file" name="file" class="form-control" id="uploadFile" required>
+              <button class="btn btn-success text-white fw-semibold" type="submit">Upload Document</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Uploaded Documents List -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-10">
+        <div class="card shadow-sm p-4">
+          <h3 class="fw-semibold text-success mb-4">Uploaded Course Resources</h3>
+          {% if files %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">File Name</th>
+                  <th scope="col">Size</th>
+                  <th scope="col">Upload Date</th>
+                  <th scope="col" class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for file in files %}
+                <tr>
+                  <td class="fw-semibold text-break">
+                    <img src="https://img.icons8.com/color/48/000000/pdf.png" width="24" height="24" class="me-2 align-middle file-icon" data-filename="{{ file.Key }}" alt="File Icon">
+                    {{ file.Key }}
+                  </td>
+                  <td>{{ (file.Size / 1024) | round(1) }} KB</td>
+                  <td>{{ file.LastModified }}</td>
+                  <td class="text-end">
+                    <a href="/static/uploads/{{ file.Key }}" class="btn btn-sm btn-outline-primary" target="_blank">View File</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-4">
+            <p class="text-muted mb-0">No resources uploaded yet. Be the first to upload course material!</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Listing -->
     <h2 class="text-center mb-4">Available Courses</h2>
     <div class="row">
       {% for course in courses %}
@@ -131,11 +214,11 @@
             <p class="card-text">{{ course.description }}</p>
             <div class="d-flex justify-content-between align-items-center mt-3">
               <span class="badge bg-primary">{{ course.badge }}</span>
-              <button
+              <a
                 class="btn btn-outline-primary"
-                onclick="window.location.href='{{ url_for('enroll', course_name=course.link) }}'">
+                href="{{ url_for('enroll', course_name=course.link) }}">
                 Enroll Now
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -153,5 +236,17 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Automatically swap icon based on file extension
+    document.addEventListener("DOMContentLoaded", function() {
+      const fileIcons = document.querySelectorAll(".file-icon");
+      fileIcons.forEach(icon => {
+        const filename = icon.getAttribute("data-filename").toLowerCase();
+        if (filename.endsWith(".png") || filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+          icon.src = "https://img.icons8.com/color/48/000000/image.png";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
